@@ -2,6 +2,7 @@ from math import pi, sqrt
 
 from msgspec import Struct
 from pint import UnitRegistry
+from wpimath.geometry import Transform3d
 
 units = UnitRegistry()
 
@@ -45,3 +46,6 @@ class Chassis(Struct, frozen=True):
         sqrt(((LENGTH.magnitude / 2) ** 2) + ((WIDTH.magnitude / 2) ** 2))
     ) * units.meter  # in meters
     ANGULAR_SPEED = (LINEAR_SPEED / ROBOT_RADIUS).to(units("rad/s"))  # in rad/s
+
+    # TODO: actually set this
+    CAMERA_POSITION = Transform3d()
