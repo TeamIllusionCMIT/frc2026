@@ -3,9 +3,9 @@ from commands2.runcommand import RunCommand
 from wpilib import AnalogGyro
 
 from config import config
+from src.subsystems.drivetrain import Drivetrain
+from src.subsystems.odometry import Odometry
 from src.subsystems.vision import Vision
-from subsystems.drivetrain import Drivetrain
-from subsystems.odometry import Odometry
 
 
 class RobotCore:
