@@ -30,7 +30,7 @@ class Chassis(Struct, frozen=True):
     # wheel and track
     WHEEL_RADIUS = units.Quantity(5 * units.inch).to(units.meter)
     WHEEL_DIAMETER = WHEEL_RADIUS * 2  # in meters
-    WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * pi * 2
+    WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * pi
 
     ## distance between left and right wheels, in meters
     TRACK_WIDTH = units.Quantity(5 * units.inch).to(units.meter)
