@@ -1,4 +1,3 @@
-from commands2 import Subsystem
 from wpimath.estimator import MecanumDrivePoseEstimator
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import MecanumDriveKinematics, MecanumDriveWheelPositions
@@ -7,27 +6,12 @@ from constants import Chassis
 from src.subsystems.vision import PhotonPoseEstimation
 
 
-class Odometry(Subsystem):
-    __slots__ = ("kinematics", "pose_estimator")
+class Odometry:
+    __slots__ = "pose_estimator"
 
     def __init__(self, starting_angle: float = 0):
-        super().__init__()
-        self.kinematics = MecanumDriveKinematics(
-            frontRightWheel=Translation2d(
-                Chassis.TRACK_WIDTH / 2, Chassis.WHEEL_BASE / 2
-            ),
-            frontLeftWheel=Translation2d(
-                -Chassis.TRACK_WIDTH / 2, Chassis.WHEEL_BASE / 2
-            ),
-            rearRightWheel=Translation2d(
-                Chassis.TRACK_WIDTH / 2, -Chassis.WHEEL_BASE / 2
-            ),
-            rearLeftWheel=Translation2d(
-                -Chassis.TRACK_WIDTH / 2, -Chassis.WHEEL_BASE / 2
-            ),
-        )
         self.pose_estimator = MecanumDrivePoseEstimator(
-            kinematics=self.kinematics,
+            kinematics=Chassis.KINEMATICS,
             gyroAngle=Rotation2d(starting_angle),
             wheelPositions=MecanumDriveWheelPositions(),
             initialPose=Pose2d(),

@@ -2,7 +2,8 @@ from math import pi, sqrt
 
 from msgspec import Struct
 from pint import UnitRegistry
-from wpimath.geometry import Transform3d
+from wpimath.geometry import Transform3d, Translation2d
+from wpimath.kinematics import MecanumDriveKinematics
 
 units = UnitRegistry()
 
@@ -49,3 +50,10 @@ class Chassis(Struct, frozen=True):
 
     # TODO: actually set this
     CAMERA_POSITION = Transform3d()
+
+    KINEMATICS = MecanumDriveKinematics(
+        frontRightWheel=Translation2d(TRACK_WIDTH / 2, WHEEL_BASE / 2),
+        frontLeftWheel=Translation2d(-TRACK_WIDTH / 2, WHEEL_BASE / 2),
+        rearRightWheel=Translation2d(TRACK_WIDTH / 2, -WHEEL_BASE / 2),
+        rearLeftWheel=Translation2d(-TRACK_WIDTH / 2, -WHEEL_BASE / 2),
+    )
