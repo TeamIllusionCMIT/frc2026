@@ -1,4 +1,5 @@
 controller_port = 0
+gyro_port = 0
 
 [motors]
 front_right_port = 1

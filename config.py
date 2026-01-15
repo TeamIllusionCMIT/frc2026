@@ -21,6 +21,8 @@ class PhotonVisionConfig(Struct, frozen=True):
 
 class ConfigFile(Struct):
     controller_port: int
+    gyro_port: int
+
     motors: MotorConfig
     vision: PhotonVisionConfig
 

@@ -1,7 +1,8 @@
-from typing import NamedTuple, Tuple
+from typing import NamedTuple, Optional, Tuple
 
 from commands2 import Subsystem
 from rev import SparkLowLevel, SparkMax, SparkRelativeEncoder
+from wpilib import AnalogGyro
 from wpilib.drive import MecanumDrive
 from wpimath.filter import SlewRateLimiter
 from wpimath.kinematics import (
@@ -77,12 +78,18 @@ class Drivetrain(Subsystem):
         "drivetrain",
         "forward_limiter",
         "sideways_limiter",
+        "gyro",
     )
 
     def __init__(
-        self, config: MotorConfig, motor_type=SparkLowLevel.MotorType.kBrushless
+        self,
+        config: MotorConfig,
+        gyro: Optional[AnalogGyro],
+        motor_type=SparkLowLevel.MotorType.kBrushless,
     ):
         super().__init__()
+
+        self.gyro = gyro
 
         # initialize motors
         self.front_right = SparkMax(config.front_right_port, motor_type)
@@ -109,17 +116,26 @@ class Drivetrain(Subsystem):
         self.forward_limiter = SlewRateLimiter(1)
         self.sideways_limiter = SlewRateLimiter(1)
 
-    def drive(self, forward: float, sideways: float, rotate: float):
+    def drive(self, x_speed: float, y_speed: float, z_rotation: float):
         """
         drive the robot using controller inputs.
 
         automatically applies ratelimits to x/y motion and softens rotation.
         """
-        self.drivetrain.driveCartesian(
-            self.sideways_limiter.calculate(sideways),
-            self.forward_limiter.calculate(forward),
-            self.square_magnitude(rotate),
-        )
+
+        if self.gyro:
+            self.drivetrain.driveCartesian(
+                xSpeed=self.sideways_limiter.calculate(x_speed),
+                ySpeed=self.forward_limiter.calculate(y_speed),
+                zRotation=self.square_magnitude(z_rotation),
+                gyroAngle=self.gyro.getRotation2d(),
+            )
+        else:
+            self.drivetrain.driveCartesian(
+                xSpeed=self.sideways_limiter.calculate(x_speed),
+                ySpeed=self.forward_limiter.calculate(y_speed),
+                zRotation=self.square_magnitude(z_rotation),
+            )
 
     @classmethod
     def square_magnitude(cls, number: float):
