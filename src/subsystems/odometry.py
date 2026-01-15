@@ -1,21 +1,22 @@
 from typing import Optional
 
 from commands2 import Subsystem
+from wpilib import AnalogGyro
 from wpimath.estimator import MecanumDrivePoseEstimator
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import MecanumDriveKinematics, MecanumDriveWheelPositions
 
 from constants import Chassis
-from src.subsystems.drivetrain import Drivetrain
+from src.subsystems.drivetrain import Encoders
 
 
 class Odometry(Subsystem):
     __slots__ = ("gyro", "kinematics", "pose_estimator")
 
-    def __init__(self, drivetrain: Drivetrain):
+    def __init__(self, gyro: AnalogGyro, encoders: Encoders):
         super().__init__()
-        self.drivetrain = drivetrain
-        self.gyro = self.drivetrain.gyro
+        self.encoders = encoders
+        self.gyro = gyro
         self.kinematics = MecanumDriveKinematics(
             frontRightWheel=Translation2d(
                 Chassis.TRACK_WIDTH / 2, Chassis.WHEEL_BASE / 2
@@ -56,4 +57,4 @@ class Odometry(Subsystem):
         return self.pose_estimator.getEstimatedPosition()
 
     def periodic(self) -> None:
-        self.update_odometry(self.drivetrain.encoders.get_wheel_positions())
+        self.update_odometry(self.encoders.get_wheel_positions())

@@ -19,7 +19,7 @@ class RobotCore:
         self.controller = CommandXboxController(self.config.controller_port)
         self.gyro = AnalogGyro(self.config.gyro_port)
         self.drivetrain = Drivetrain(self.config.motors, self.gyro)
-        self.odometry = Odometry(self.drivetrain)
+        self.odometry = Odometry(self.gyro, self.drivetrain.encoders)
 
     def configure_bindings(self):
         # define drivetrain command.
