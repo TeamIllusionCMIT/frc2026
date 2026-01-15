@@ -8,6 +8,15 @@ from src.subsystems.odometry import Odometry
 from src.subsystems.vision import Vision
 
 
+def deadband(value: float, threshold=0.02) -> float:
+    """
+    returns zero if the value is less than 0.02
+
+    helps combat slight stick drift
+    """
+    return value if abs(value) > threshold else 0
+
+
 class RobotCore:
     """
     the core of the robot's functionality.
@@ -31,9 +40,9 @@ class RobotCore:
         self.drivetrain.setDefaultCommand(
             RunCommand(
                 lambda: self.drivetrain.drive(
-                    self.controller.getLeftY(),
-                    self.controller.getLeftX(),
-                    self.controller.getRightX(),
+                    deadband(self.controller.getLeftY()),
+                    deadband(self.controller.getLeftX()),
+                    deadband(self.controller.getRightX()),
                 ),
                 self.drivetrain,
             )
