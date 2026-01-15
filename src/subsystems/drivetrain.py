@@ -1,4 +1,4 @@
-from typing import NamedTuple, Optional, Tuple
+from typing import NamedTuple, Tuple
 
 from commands2 import Subsystem
 from rev import SparkLowLevel, SparkMax, SparkRelativeEncoder
@@ -84,7 +84,7 @@ class Drivetrain(Subsystem):
     def __init__(
         self,
         config: MotorConfig,
-        gyro: Optional[AnalogGyro],
+        gyro: AnalogGyro,
         motor_type=SparkLowLevel.MotorType.kBrushless,
     ):
         super().__init__()
