@@ -12,10 +12,8 @@ class RobotContainer:
         self.drivetrain = Drivetrain(self.config.motors)
 
     def configure_bindings(self):
-        # TODO: adjust the joystick ports
-        self.controller.axisMagnitudeGreaterThan(0, 0.1).or_(
-            self.controller.axisMagnitudeGreaterThan(1, 0.1)
-        ).onTrue(
+        # define drivetrain command.
+        self.drivetrain.setDefaultCommand(
             RunCommand(
                 lambda: self.drivetrain.drive(
                     self.controller.getLeftY(),
