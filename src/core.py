@@ -25,6 +25,8 @@ class RobotCore:
         self.vision = Vision(self.config.vision.camera_name)
         self.odometry = Odometry(self.gyro.getAngle())
 
+        self.configure_bindings()
+
     def configure_bindings(self):
         # define drivetrain command.
         self.drivetrain.setDefaultCommand(
