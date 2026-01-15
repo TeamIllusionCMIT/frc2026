@@ -11,4 +11,5 @@ class Robot(TimedCommandRobot):
         self.core = RobotCore()
 
     def robotPeriodic(self) -> None:
+        self.core.periodic()
         CommandScheduler.getInstance().run()

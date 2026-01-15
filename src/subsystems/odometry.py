@@ -1,22 +1,17 @@
-from typing import Optional
-
 from commands2 import Subsystem
-from wpilib import AnalogGyro
 from wpimath.estimator import MecanumDrivePoseEstimator
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import MecanumDriveKinematics, MecanumDriveWheelPositions
 
 from constants import Chassis
-from src.subsystems.drivetrain import Encoders
+from src.subsystems.vision import PhotonPoseEstimation
 
 
 class Odometry(Subsystem):
-    __slots__ = ("gyro", "kinematics", "pose_estimator")
+    __slots__ = ("kinematics", "pose_estimator")
 
-    def __init__(self, gyro: AnalogGyro, encoders: Encoders):
+    def __init__(self, starting_angle: float = 0):
         super().__init__()
-        self.encoders = encoders
-        self.gyro = gyro
         self.kinematics = MecanumDriveKinematics(
             frontRightWheel=Translation2d(
                 Chassis.TRACK_WIDTH / 2, Chassis.WHEEL_BASE / 2
@@ -33,7 +28,7 @@ class Odometry(Subsystem):
         )
         self.pose_estimator = MecanumDrivePoseEstimator(
             kinematics=self.kinematics,
-            gyroAngle=Rotation2d(self.gyro.getAngle()),
+            gyroAngle=Rotation2d(starting_angle),
             wheelPositions=MecanumDriveWheelPositions(),
             initialPose=Pose2d(),
         )
@@ -41,20 +36,15 @@ class Odometry(Subsystem):
     def update_odometry(
         self,
         wheel_positions: MecanumDriveWheelPositions,
-        vision_measurement: Optional[Pose2d] = None,
-        vision_timestamp: Optional[float] = None,
+        angle: float,
+        vision_estimate: PhotonPoseEstimation | None,
     ) -> Pose2d:
         # TODO: custom vision measurement type that bundles these together
-        if vision_measurement and vision_timestamp:
+        if vision_estimate:
             self.pose_estimator.addVisionMeasurement(
-                vision_measurement, vision_timestamp
+                vision_estimate.pose, vision_estimate.timestamp
             )
-        return self.pose_estimator.update(
-            Rotation2d(self.gyro.getAngle()), wheel_positions
-        )
+        return self.pose_estimator.update(Rotation2d(angle), wheel_positions)
 
     def get_position(self) -> Pose2d:
         return self.pose_estimator.getEstimatedPosition()
-
-    def periodic(self) -> None:
-        self.update_odometry(self.encoders.get_wheel_positions())
