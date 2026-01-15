@@ -16,7 +16,7 @@ class MotorConfig(Struct, frozen=True):
 
 
 class PhotonVisionConfig(Struct, frozen=True):
-    pass
+    camera_name: str
 
 
 class ConfigFile(Struct):
