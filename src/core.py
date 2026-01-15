@@ -6,7 +6,13 @@ from config import config
 from subsystems.drivetrain import Drivetrain
 
 
-class RobotContainer:
+class RobotCore:
+    """
+    the core of the robot's functionality.
+    """
+
+    __slots__ = ("config", "controller", "gyro", "drivetrain")
+
     def __init__(self):
         self.config = config
         self.controller = CommandXboxController(self.config.controller_port)
