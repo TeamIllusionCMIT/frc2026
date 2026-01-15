@@ -1,3 +1,4 @@
+from math import copysign
 from typing import NamedTuple, Tuple
 
 from commands2 import Subsystem
@@ -127,22 +128,15 @@ class Drivetrain(Subsystem):
             self.drivetrain.driveCartesian(
                 xSpeed=self.sideways_limiter.calculate(x_speed),
                 ySpeed=self.forward_limiter.calculate(y_speed),
-                zRotation=self.square_magnitude(z_rotation),
+                zRotation=copysign(z_rotation**2, z_rotation),
                 gyroAngle=self.gyro.getRotation2d(),
             )
         else:
             self.drivetrain.driveCartesian(
                 xSpeed=self.sideways_limiter.calculate(x_speed),
                 ySpeed=self.forward_limiter.calculate(y_speed),
-                zRotation=self.square_magnitude(z_rotation),
+                zRotation=copysign(z_rotation**2, z_rotation),
             )
-
-    @classmethod
-    def square_magnitude(cls, number: float):
-        """
-        simple helper function to square a float without changing the sign, e.g. `square_magnitude(-4) == -16`
-        """
-        return (number**2) * (-1 if number < 0 else 1)
 
     @classmethod
     def normalize_chassis_speeds(
