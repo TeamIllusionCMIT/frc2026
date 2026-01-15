@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "msgspec>=0.20.0",
+    "photonlibpy>=2026.0.1b38",
     "pint>=0.25.2",
     "pintless>=0.1.0",
     "robotpy-rev>=2026.0.0",
