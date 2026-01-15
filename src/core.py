@@ -13,16 +13,15 @@ class RobotCore:
     the core of the robot's functionality.
     """
 
-    __slots__ = ("config", "controller", "gyro", "drivetrain", "odometry", "vision")
+    __slots__ = ("controller", "gyro", "drivetrain", "odometry", "vision")
 
     def __init__(self):
-        self.config = config
-        self.controller = CommandXboxController(self.config.controller_port)
-        self.gyro = AnalogGyro(self.config.gyro_port)
+        self.controller = CommandXboxController(config.controller_port)
+        self.gyro = AnalogGyro(config.gyro_port)
         self.gyro.reset()
 
-        self.drivetrain = Drivetrain(self.config.motors, self.gyro)
-        self.vision = Vision(self.config.vision.camera_name)
+        self.drivetrain = Drivetrain(config.motors, self.gyro)
+        self.vision = Vision(config.vision.camera_name)
         self.odometry = Odometry(self.gyro.getAngle())
 
         self.configure_bindings()
