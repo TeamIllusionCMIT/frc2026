@@ -52,8 +52,16 @@ class Chassis(Struct, frozen=True):
     CAMERA_POSITION = Transform3d()
 
     KINEMATICS = MecanumDriveKinematics(
-        frontRightWheel=Translation2d(TRACK_WIDTH / 2, WHEEL_BASE / 2),
-        frontLeftWheel=Translation2d(-TRACK_WIDTH / 2, WHEEL_BASE / 2),
-        rearRightWheel=Translation2d(TRACK_WIDTH / 2, -WHEEL_BASE / 2),
-        rearLeftWheel=Translation2d(-TRACK_WIDTH / 2, -WHEEL_BASE / 2),
+        frontRightWheel=Translation2d(
+            TRACK_WIDTH.magnitude / 2, WHEEL_BASE.magnitude / 2
+        ),
+        frontLeftWheel=Translation2d(
+            -TRACK_WIDTH.magnitude / 2, WHEEL_BASE.magnitude / 2
+        ),
+        rearRightWheel=Translation2d(
+            TRACK_WIDTH.magnitude / 2, -WHEEL_BASE.magnitude / 2
+        ),
+        rearLeftWheel=Translation2d(
+            -TRACK_WIDTH.magnitude / 2, -WHEEL_BASE.magnitude / 2
+        ),
     )
