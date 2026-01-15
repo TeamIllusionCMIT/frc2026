@@ -148,7 +148,7 @@ class Drivetrain(Subsystem):
         return (
             speeds.vx / Chassis.LINEAR_SPEED,
             speeds.vy / Chassis.LINEAR_SPEED,
-            speeds.omega / Chassis.LINEAR_SPEED,
+            speeds.omega / Chassis.ANGULAR_SPEED,
         )
 
     def drive_relative(self, speeds: ChassisSpeeds):
