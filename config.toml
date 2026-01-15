@@ -1,0 +1,10 @@
+controller_port = 0
+
+[motors]
+front_right_port = 1
+front_left_port = 2
+
+rear_right_port = 3
+rear_left_port = 4
+
+[vision]

@@ -1,0 +1,20 @@
+[project]
+name = "frc2026"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "msgspec>=0.20.0",
+    "pint>=0.25.2",
+    "pintless>=0.1.0",
+    "robotpy-rev>=2026.0.0",
+    "robotpy[commands2]>=2026.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.37.1",
+    "ruff>=0.14.11",
+    "ty>=0.0.12",
+]
