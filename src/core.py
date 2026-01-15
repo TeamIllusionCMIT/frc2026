@@ -21,8 +21,8 @@ class RobotCore:
         self.gyro.reset()
 
         self.drivetrain = Drivetrain(config.motors, self.gyro)
-        self.vision = Vision(config.vision.camera_name)
         self.odometry = Odometry(self.gyro.getAngle())
+        self.vision = Vision(config.vision.camera_name)
 
         self.configure_bindings()
 
