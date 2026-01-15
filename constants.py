@@ -26,16 +26,16 @@ class Chassis(Struct, frozen=True):
     WIDTH = units.Quantity(0.67 * units.meter)
 
     # wheel and track
-    WHEEL_RADIUS = units.Quantity(5 * units.inch).to(units.meter)  # type: ignore
+    WHEEL_RADIUS = units.Quantity(5 * units.inch).to(units.meter)
     WHEEL_DIAMETER = WHEEL_RADIUS * 2  # in meters
     WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * pi * 2
-    TRACK_WIDTH = units.Quantity(5 * units.inch).to(
-        units.meter
-    )  # distance from left wheels to right wheels, in meters
-    WHEEL_BASE = units.Quantity(5 * units.inch).to(
-        units.meter
-    )  # distance from front wheels to back wheels, in meters
-    GEAR_RATIO: float = 8.450  # gear ratio of the drivetrain. from the kitbot datasheet
+
+    ## distance between left and right wheels, in meters
+    TRACK_WIDTH = units.Quantity(5 * units.inch).to(units.meter)
+    ## distance from front wheels to back wheels, in meters
+    WHEEL_BASE = units.Quantity(5 * units.inch).to(units.meter)
+    ## gear ratio of the drivetrain. from the kitbot datasheet
+    GEAR_RATIO: float = 8.450
 
     # derived from other things
     LINEAR_SPEED = ((WHEEL_RADIUS * VortexMotorConstants.FREE_SPEED) / GEAR_RATIO).to(
