@@ -1,6 +1,5 @@
 from math import pi, sqrt
 
-from msgspec import Struct
 from pint import UnitRegistry
 from wpimath.geometry import Transform3d, Translation2d
 from wpimath.kinematics import MecanumDriveKinematics
@@ -8,21 +7,21 @@ from wpimath.kinematics import MecanumDriveKinematics
 units = UnitRegistry()
 
 
-class VortexMotorConstants(Struct, frozen=True):
+class VortexMotorConstants:
     FREE_SPEED = 5676 * units.rpm
     ENCODER_RESOLUTION = (
         42 * units.counts / units.revolution
     )  # in counts per revolution
 
 
-class AprilTagConstants(Struct, frozen=True):
+class AprilTagConstants:
     # this is necessary to make it not angry
     APRILTAG_WIDTH = units.Quantity(8.125 * units.inch).to(units.meter)
 
     # TODO: add other stuff like locations
 
 
-class Chassis(Struct, frozen=True):
+class Chassis:
     # body
     LENGTH = units.Quantity(0.82 * units.meter)
     WIDTH = units.Quantity(0.67 * units.meter)
