@@ -22,7 +22,7 @@ class RobotCore:
     the core of the robot's functionality.
     """
 
-    __slots__ = ("controller", "gyro", "drivetrain", "odometry", "vision")
+    __slots__ = ("controller", "gyro", "drivetrain", "odometry", "vision", "pose")
 
     def __init__(self):
         self.controller = CommandXboxController(config.controller_port)
@@ -32,6 +32,8 @@ class RobotCore:
         self.drivetrain = Drivetrain(config.motors, self.gyro)
         self.odometry = Odometry(self.gyro.getAngle())
         self.vision = Vision(config.vision.camera_name)
+
+        self.pose = self.odometry.get_position()
 
         self.configure_bindings()
 
@@ -51,6 +53,6 @@ class RobotCore:
     def periodic(self):
         vision_estimate = self.vision.estimate_position()
         wheel_positions = self.drivetrain.encoders.get_wheel_positions()
-        self.odometry.update_odometry(
+        self.pose = self.odometry.update_odometry(
             wheel_positions, self.gyro.getAngle(), vision_estimate
         )
