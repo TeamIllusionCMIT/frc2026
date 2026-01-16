@@ -1,8 +1,7 @@
 from typing import NamedTuple, Optional
 
-from commands2 import Subsystem
 from photonlibpy import EstimatedRobotPose, PhotonCamera, PhotonPoseEstimator
-from photonlibpy.photonPoseEstimator import PhotonPipelineResult
+from photonlibpy.targeting import PhotonPipelineResult
 from robotpy_apriltag import AprilTagField, AprilTagFieldLayout
 from wpimath.geometry import Pose2d
 
@@ -21,7 +20,7 @@ class PhotonPoseEstimation(NamedTuple):
         )
 
 
-class Vision(Subsystem):
+class Vision:
     def __init__(self, camera_name: str):
         self.camera = PhotonCamera(camera_name)
         self.pose_estimator = PhotonPoseEstimator(
