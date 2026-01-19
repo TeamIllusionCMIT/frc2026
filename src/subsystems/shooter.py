@@ -2,14 +2,16 @@ from commands2 import Subsystem
 from rev import SparkLowLevel, SparkMax
 from wpimath.controller import PIDController
 
+from config import MotorConfig
+
 
 class Shooter(Subsystem):
     __slots__ = ("hood_motor", "hood_encoder", "shooter", "auto", "controller")
 
-    def __init__(self):
-        self.hood_motor = SparkMax(6, SparkLowLevel.MotorType.kBrushless)
+    def __init__(self, config: MotorConfig):
+        self.hood_motor = SparkMax(config.hood_port, SparkLowLevel.MotorType.kBrushless)
         self.hood_encoder = self.hood_motor.getEncoder()
-        self.shooter = SparkMax(7, SparkLowLevel.MotorType.kBrushless)
+        self.shooter = SparkMax(config.shooter_port, SparkLowLevel.MotorType.kBrushless)
 
         # this will be `True` when actively moving to a
         # setpoint and `False` otherwise
@@ -17,7 +19,10 @@ class Shooter(Subsystem):
 
         # this should become a ProfiledPIDController later
         # also these constants are entirely made up if you cant tell
-        self.controller = PIDController(1, 1, 1)
+        pid_constants = config.hood_pid
+        self.controller = PIDController(
+            pid_constants.kP, pid_constants.kI, pid_constants.kD
+        )
 
     def open(self) -> None:
         """

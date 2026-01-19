@@ -41,7 +41,7 @@ class RobotCore:
         self.drivetrain = Drivetrain(config.motors, self.gyro)
         self.odometry = Odometry(self.gyro.getAngle())
         self.vision = Vision(config.vision.camera_name)
-        self.shooter = Shooter()
+        self.shooter = Shooter(config.motors)
 
         self.pose = self.odometry.get_position()
 
