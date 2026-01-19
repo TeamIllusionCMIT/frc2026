@@ -8,5 +8,13 @@ front_left_port = 2
 rear_right_port = 3
 rear_left_port = 4
 
+hood_port = 5
+shooter_port = 6
+
+[motors.hood_pid]
+P = 0.1
+I = 0
+D = 0
+
 [vision]
 camera_name = "main"
