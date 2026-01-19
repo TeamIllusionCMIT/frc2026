@@ -52,6 +52,7 @@ class Shooter(Subsystem):
         self.shooter.set(0)
 
     def set_setpoint(self, setpoint: float) -> None:
+        self.auto = True
         self.controller.setSetpoint(setpoint)
 
     def get_setpoint(self) -> float:
