@@ -9,10 +9,48 @@ class Shooter(Subsystem):
         self.hood_encoder = self.hood_motor.getEncoder()
         self.shooter = SparkMax(7, SparkLowLevel.MotorType.kBrushless)
 
+        # this will be `True` when actively moving to a
+        # setpoint and `False` otherwise
+        self.auto = False
+
         # this should become a ProfiledPIDController later
         # also these constants are entirely made up if you cant tell
         self.controller = PIDController(1, 1, 1)
 
+    def open(self) -> None:
+        """
+        open hood. makes shooter fire more upward and less forward. calling this will deactivate any setpoint.
+        """
+        self.auto = False
+        self.hood_motor.set(1)
+
+    def close(self) -> None:
+        """
+        close hood. makes shooter fire more forward and less upward. calling this will deactivate any setpoint.
+        """
+        self.auto = False
+        self.hood_motor.set(-1)
+
+    def shoot(self) -> None:
+        """
+        activate shooter
+        """
+        self.shooter.set(1)
+
+    def set_setpoint(self, setpoint: float) -> None:
+        self.controller.setSetpoint(setpoint)
+
+    def get_setpoint(self) -> float:
+        return self.controller.getSetpoint()
+
     def periodic(self) -> None:
-        measurement = self.hood_encoder.getPosition()
-        self.hood_motor.set(self.controller.calculate(measurement))
+        if self.auto:
+            # if we're supposed to be running autonomously right now...
+
+            if self.controller.atSetpoint():
+                # and we've just hit the setpoint
+                self.auto = False
+            else:
+                # otherwise, carry on
+                measurement = self.hood_encoder.getPosition()
+                self.hood_motor.set(self.controller.calculate(measurement))
