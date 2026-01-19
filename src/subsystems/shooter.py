@@ -4,6 +4,8 @@ from wpimath.controller import PIDController
 
 
 class Shooter(Subsystem):
+    __slots__ = ("hood_motor", "hood_encoder", "shooter", "auto", "controller")
+
     def __init__(self):
         self.hood_motor = SparkMax(6, SparkLowLevel.MotorType.kBrushless)
         self.hood_encoder = self.hood_motor.getEncoder()
