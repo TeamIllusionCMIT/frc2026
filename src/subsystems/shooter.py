@@ -33,11 +33,18 @@ class Shooter(Subsystem):
         self.auto = False
         self.hood_motor.set(-1)
 
+    def stop(self) -> None:
+        self.auto = False
+        self.hood_motor.set(0)
+
     def shoot(self) -> None:
         """
         activate shooter
         """
         self.shooter.set(1)
+
+    def stop_shooter(self) -> None:
+        self.shooter.set(0)
 
     def set_setpoint(self, setpoint: float) -> None:
         self.controller.setSetpoint(setpoint)

@@ -5,6 +5,7 @@ from wpilib import AnalogGyro
 from config import config
 from src.subsystems.drivetrain import Drivetrain
 from src.subsystems.odometry import Odometry
+from src.subsystems.shooter import Shooter
 from src.subsystems.vision import Vision
 
 
@@ -22,7 +23,15 @@ class RobotCore:
     the core of the robot's functionality.
     """
 
-    __slots__ = ("controller", "gyro", "drivetrain", "odometry", "vision", "pose")
+    __slots__ = (
+        "controller",
+        "gyro",
+        "drivetrain",
+        "odometry",
+        "vision",
+        "shooter",
+        "pose",
+    )
 
     def __init__(self):
         self.controller = CommandXboxController(config.controller_port)
@@ -32,6 +41,7 @@ class RobotCore:
         self.drivetrain = Drivetrain(config.motors, self.gyro)
         self.odometry = Odometry(self.gyro.getAngle())
         self.vision = Vision(config.vision.camera_name)
+        self.shooter = Shooter()
 
         self.pose = self.odometry.get_position()
 
@@ -49,6 +59,19 @@ class RobotCore:
                 self.drivetrain,
             )
         )
+
+        # set shooter and hood commands
+        self.controller.leftBumper().onTrue(
+            RunCommand(self.shooter.close, self.shooter),
+        ).onFalse(RunCommand(self.shooter.stop, self.shooter))
+
+        self.controller.rightBumper().onTrue(
+            RunCommand(self.shooter.open, self.shooter),
+        ).onFalse(RunCommand(self.shooter.stop, self.shooter))
+
+        self.controller.rightTrigger().onTrue(
+            RunCommand(self.shooter.shoot, self.shooter)
+        ).onFalse(RunCommand(self.shooter.stop_shooter, self.shooter))
 
     def periodic(self):
         vision_estimate = self.vision.estimate_position()
