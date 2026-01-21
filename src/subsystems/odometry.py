@@ -1,3 +1,4 @@
+from wpilib import Field2d
 from wpimath.estimator import MecanumDrivePoseEstimator
 from wpimath.geometry import Pose2d, Rotation2d
 from wpimath.kinematics import MecanumDriveWheelPositions
@@ -7,7 +8,7 @@ from src.subsystems.vision import PhotonPoseEstimation
 
 
 class Odometry:
-    __slots__ = "pose_estimator"
+    __slots__ = ("pose_estimator", "field")
 
     def __init__(self, starting_angle: float = 0):
         self.pose_estimator = MecanumDrivePoseEstimator(
@@ -16,6 +17,7 @@ class Odometry:
             wheelPositions=MecanumDriveWheelPositions(),
             initialPose=Pose2d(),
         )
+        self.field = Field2d()
 
     def update_odometry(
         self,
@@ -28,7 +30,15 @@ class Odometry:
             self.pose_estimator.addVisionMeasurement(
                 vision_estimate.pose, vision_estimate.timestamp
             )
-        return self.pose_estimator.update(Rotation2d(angle), wheel_positions)
+        result = self.pose_estimator.update(Rotation2d(angle), wheel_positions)
+        self.field.setRobotPose(result)
+        return result
 
     def get_position(self) -> Pose2d:
         return self.pose_estimator.getEstimatedPosition()
+
+    def get_field(self) -> Field2d:
+        """
+        get the robot's current position as a Field2d
+        """
+        return self.field

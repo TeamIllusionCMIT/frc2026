@@ -3,7 +3,7 @@ from typing import NamedTuple, Tuple
 
 from commands2 import Subsystem
 from rev import SparkLowLevel, SparkMax, SparkRelativeEncoder
-from wpilib import AnalogGyro
+from wpilib import AnalogGyro, SmartDashboard
 from wpilib.drive import MecanumDrive
 from wpimath.filter import SlewRateLimiter
 from wpimath.kinematics import (
@@ -112,6 +112,7 @@ class Drivetrain(Subsystem):
             self.front_left, self.rear_left, self.front_right, self.rear_right
         )
         self.drivetrain.setExpiration(0.1)
+        SmartDashboard.putData("drivetrain", self.drivetrain)
 
         # initialize slew rate limiters to soften acceleration
         self.forward_limiter = SlewRateLimiter(1)
