@@ -22,6 +22,7 @@ class PhotonPoseEstimation(NamedTuple):
 
 class Vision:
     __slots__ = ("camera", "pose_estimator")
+
     def __init__(self, camera_name: str):
         self.camera = PhotonCamera(camera_name)
         self.pose_estimator = PhotonPoseEstimator(
