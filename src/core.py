@@ -46,6 +46,7 @@ class RobotCore:
         self.pose = self.odometry.get_position()
 
         SmartDashboard.putData("pose", self.odometry.get_field())
+        SmartDashboard.putData("gyro", self.gyro)
         self.configure_bindings()
         SmartDashboard.putNumber("voltage", RobotController.getBatteryVoltage())
 
