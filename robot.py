@@ -5,6 +5,7 @@ from src.core import RobotCore
 
 
 class Robot(TimedCommandRobot):
+    __slots__ = ("core")
     def __init__(self):
         super().__init__()
 
