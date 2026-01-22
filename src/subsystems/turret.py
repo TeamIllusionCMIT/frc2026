@@ -1,6 +1,7 @@
 from commands2 import Subsystem
-from rev import SparkMax, SparkLowLevel
+from rev import SparkLowLevel, SparkMax
 from wpimath.controller import PIDController
+
 from config import TurretConfig
 
 
@@ -18,6 +19,12 @@ class Turret(Subsystem):
 
     def get_position(self) -> float:
         return self.controller.getSetpoint()  # TODO: need to set up conversion
+
+    def rotate(self, speed: float):
+        self.motor.set(speed)
+
+    def stop(self):
+        self.motor.stopMotor()
 
     def periodic(self):
         self.motor.set(self.controller.calculate(self.get_position()))
