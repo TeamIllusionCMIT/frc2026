@@ -14,6 +14,11 @@ class PIDConfig(Struct, frozen=True):
     kD: float = field(name="D")
 
 
+class TurretConfig(Struct, frozen=True):
+    port: int
+    pid: PIDConfig
+
+
 class MotorConfig(Struct, frozen=True):
     front_right_port: int
     front_left_port: int
@@ -25,6 +30,7 @@ class MotorConfig(Struct, frozen=True):
     shooter_port: int
 
     hood_pid: PIDConfig
+    turret: TurretConfig
 
 
 class PhotonVisionConfig(Struct, frozen=True):
