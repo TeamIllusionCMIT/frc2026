@@ -1,12 +1,14 @@
 from commands2 import Subsystem
 from rev import SparkMax, SparkLowLevel
 from wpimath.controller import PIDController
+from config import TurretConfig
 
 
 class Turret(Subsystem):
-    def __init__(self):
-        self.motor = SparkMax(0, SparkLowLevel.MotorType.kBrushless)
-        self.controller = PIDController(0, 0, 0)
+    def __init__(self, config: TurretConfig):
+        self.motor = SparkMax(config.port, SparkLowLevel.MotorType.kBrushless)
+        self.controller = PIDController(config.pid.kP, config.pid.kI, config.pid.kD)
+        self.controller.enableContinuousInput(-180, 180)
 
     def set_position(self, angle: float):
         """
