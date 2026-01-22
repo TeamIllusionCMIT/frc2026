@@ -1,6 +1,6 @@
 from commands2.button import CommandXboxController
 from commands2.runcommand import RunCommand
-from wpilib import AnalogGyro
+from wpilib import AnalogGyro, SmartDashboard, RobotController
 
 from config import config
 from src.subsystems.drivetrain import Drivetrain
@@ -45,7 +45,10 @@ class RobotCore:
 
         self.pose = self.odometry.get_position()
 
+        SmartDashboard.putData("pose", self.odometry.get_field())
+        SmartDashboard.putData("gyro", self.gyro)
         self.configure_bindings()
+        SmartDashboard.putNumber("voltage", RobotController.getBatteryVoltage())
 
     def configure_bindings(self):
         # define drivetrain command.
