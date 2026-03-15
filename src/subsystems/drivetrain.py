@@ -2,8 +2,8 @@ from math import copysign
 from typing import NamedTuple, Tuple
 
 from commands2 import Subsystem
-from rev import SparkLowLevel, SparkMax, SparkRelativeEncoder
-from wpilib import AnalogGyro, SmartDashboard
+from rev import SparkLowLevel, SparkMax, SparkRelativeEncoder, SparkBaseConfig
+from wpilib import AnalogGyro, SmartDashboard, ADIS16470_IMU
 from wpilib.drive import MecanumDrive
 from wpimath.filter import SlewRateLimiter
 from wpimath.kinematics import (
@@ -85,7 +85,7 @@ class Drivetrain(Subsystem):
     def __init__(
         self,
         config: MotorConfig,
-        gyro: AnalogGyro,
+        gyro: ADIS16470_IMU | None,
         motor_type=SparkLowLevel.MotorType.kBrushless,
     ):
         super().__init__()
@@ -94,10 +94,13 @@ class Drivetrain(Subsystem):
 
         # initialize motors
         self.front_right = SparkMax(config.front_right_port, motor_type)
+        # self.front_right.setInverted(True)
+
         self.front_left = SparkMax(config.front_left_port, motor_type)
 
         self.rear_right = SparkMax(config.rear_right_port, motor_type)
         self.rear_left = SparkMax(config.rear_left_port, motor_type)
+        self.rear_left.setInverted(True)
 
         # create encoder object
         self.encoders = Encoders(
@@ -115,8 +118,8 @@ class Drivetrain(Subsystem):
         SmartDashboard.putData("drivetrain", self.drivetrain)
 
         # initialize slew rate limiters to soften acceleration
-        self.forward_limiter = SlewRateLimiter(1)
-        self.sideways_limiter = SlewRateLimiter(1)
+        self.forward_limiter = SlewRateLimiter(1, -9999999)
+        self.sideways_limiter = SlewRateLimiter(1, -9999999)
 
     def drive(self, x_speed: float, y_speed: float, z_rotation: float):
         """
@@ -127,15 +130,15 @@ class Drivetrain(Subsystem):
 
         if self.gyro:
             self.drivetrain.driveCartesian(
-                xSpeed=self.sideways_limiter.calculate(x_speed),
-                ySpeed=self.forward_limiter.calculate(y_speed),
+                xSpeed=copysign(x_speed**2, x_speed),
+                ySpeed=copysign(y_speed**2, y_speed),
                 zRotation=copysign(z_rotation**2, z_rotation),
-                gyroAngle=self.gyro.getRotation2d(),
+                # gyroAngle=self.gyro.getRotation2d(),
             )
         else:
             self.drivetrain.driveCartesian(
-                xSpeed=self.sideways_limiter.calculate(x_speed),
-                ySpeed=self.forward_limiter.calculate(y_speed),
+                xSpeed=copysign(x_speed**2, x_speed),
+                ySpeed=copysign(y_speed**2, y_speed),
                 zRotation=copysign(z_rotation**2, z_rotation),
             )
 

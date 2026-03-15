@@ -1,7 +1,7 @@
 from typing import NamedTuple, Optional
 
 from photonlibpy import EstimatedRobotPose, PhotonCamera, PhotonPoseEstimator
-from photonlibpy.targeting import PhotonPipelineResult
+from photonlibpy.targeting import PhotonPipelineResult, PhotonTrackedTarget
 from robotpy_apriltag import AprilTagField, AprilTagFieldLayout
 from wpimath.geometry import Pose2d
 
@@ -47,3 +47,8 @@ class Vision:
         """
         results = self.camera.getAllUnreadResults()
         return results[0] if len(results) > 0 else None
+
+    def get_latest_targets(self) -> Optional[list[PhotonTrackedTarget]]:
+        results = self.get_latest_result()
+        if results:
+            return results.getTargets()

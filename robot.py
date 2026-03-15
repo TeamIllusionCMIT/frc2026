@@ -15,3 +15,6 @@ class Robot(TimedCommandRobot):
     def robotPeriodic(self) -> None:
         self.core.periodic()
         CommandScheduler.getInstance().run()
+
+    def autonomousPeriodic(self) -> None:
+        self.core.drivetrain.drive(-0.5, 0, 0)

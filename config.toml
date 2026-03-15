@@ -8,13 +8,14 @@ front_left_port = 2
 rear_right_port = 3
 rear_left_port = 4
 
-hood_port = 5
-shooter_port = 6
 
-[motors.hood_pid]
+[motors.shooter.pid]
 P = 0.1
 I = 0
 D = 0
+
+[motors.shooter]
+port=6
 
 [motors.turret]
 port = 7
@@ -24,6 +25,13 @@ P = 0.05
 I = 0
 D = 0
 
+[motors.intake]
+port = 8
+
+[motors.intake.pid]
+P = 0.05
+I = 0
+D = 0
 
 
 [vision]

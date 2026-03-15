@@ -14,8 +14,10 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "basedpyright>=1.37.1",
-    "ruff>=0.14.11",
-    "ty>=0.0.12",
-]
+dev = ["basedpyright>=1.37.1", "ruff>=0.14.11", "ty>=0.0.12"]
+
+[tool.robotpy]
+team_number = 4464
+robotpy_version = "2026.2.1.1"
+components = ["commands2"]
+requires = ["pint", "photonlibpy", "robotpy-rev"]
